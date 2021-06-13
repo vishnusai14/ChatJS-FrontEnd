@@ -1,21 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import React from 'react'
+
+import MainNavigator from './navigation/ChatNavigator'
+import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import chatReducer from './store/reducers/chatReducers'
+import { init } from './services/sqlitedb.js'
+
+init()
+.then((res) => {
+  console.log(res)
+})
+.catch((err) => {
+  console.log(err)
+})
+
+const store = createStore(chatReducer)
+class App extends React.Component {
+
+
+  render() {
+    return (
+      <Provider store = {store}>
+        <PaperProvider>
+          <MainNavigator />
+        </PaperProvider>
+      </Provider>
+       )
+
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
+
