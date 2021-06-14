@@ -1,12 +1,12 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('places.db')
+const db = SQLite.openDatabase('chats.db')
 
 export const init = () => {
     const promise = new Promise((resolve, reject) => {
 
         db.transaction((tx) => {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS contacts(id INTEGER PRIMARY KEY NOT NULL, userId TEXT NOT NULL, userName TEXT NOT NULL);',
+            tx.executeSql('CREATE TABLE IF NOT EXISTS people(id INTEGER PRIMARY KEY NOT NULL, userId TEXT NOT NULL, userName TEXT NOT NULL, userEmail TEXT NOT NULL);',
                     [],
                     (_, success) => {
                         resolve(success)
@@ -23,9 +23,10 @@ export const init = () => {
 }
 
 export const getUser = (userId) => {
+    console.log(userId)
     const promise = new Promise((resolve, reject) => {
         db.transaction((tx) => {
-            tx.executeSql(`SELECT userName FROM contacts WHERE userId = ${userId.toString()}`,
+            tx.executeSql(`SELECT userName FROM people WHERE userId = ${userId.toString()}`,
                         [],
                         (query, success) => {
                             console.log(query)
@@ -40,11 +41,11 @@ export const getUser = (userId) => {
     return promise
 }
 
-export const saveUserToDb = (userName, id) => {
+export const saveUserToDb = (userName, id, userEmail) => {
     const promise = new Promise((resolve, reject) => {
         db.transaction((tx) => {
-            tx.executeSql('INSERT INTO contacts(userId, userName) VALUES (?, ?);',
-                        [id, userName],
+            tx.executeSql('INSERT INTO people(userId, userName, userEmail) VALUES (?, ?, ?);',
+                        [id, userName, userEmail],
                         (_, success) => {
                             resolve(success)
                         },
@@ -57,3 +58,22 @@ export const saveUserToDb = (userName, id) => {
     })
     return promise
 } 
+
+export const fetchUsers = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql('SELECT * FROM people;',
+            [],
+            (_, success) => {
+                resolve(success)
+            },
+            (_, err) => {
+                reject(err)
+            }
+            )
+        })
+
+    })
+
+    return promise
+}

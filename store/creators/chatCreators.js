@@ -8,8 +8,13 @@ export const setToken = (token) => {
 
 }
 
-// export const fetchAllUser = () => {
-//     return dispatch => {
-       
-//     }
-// }
+export const setUser = (user) => {
+ 
+    console.log("This is From Setter" , user)
+    return {
+        type : 'SET_USER',
+        user : user
+    }
+
+    
+}

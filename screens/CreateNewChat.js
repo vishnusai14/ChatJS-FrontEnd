@@ -59,9 +59,9 @@ class CreateNewChat extends React.Component {
             }else {
                 axiosInstance.post("/user/checkUser" , data)
                 .then((res) => {
-                   
-                    
-                    saveUserToDb(this.state.name, this.state.id)
+                   const email = res.data.data
+                    console.log(email)
+                    saveUserToDb(this.state.name, this.state.id, email)
                     .then((response) => {
                         this.setState(prevState => ({
                             ...prevState,

@@ -3,8 +3,8 @@ import { View, StyleSheet } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as actionTypes from '../store/creators/chatCreators'
 import { connect } from 'react-redux'
-import axiosInstance from '../services/axiosInstance'
-
+import { fetchUsers } from '../services/sqlitedb'
+import { socket } from '../services/socketStuff'
 import Spinner from "../components/spinner"
 
 const styles = StyleSheet.create({
@@ -29,15 +29,23 @@ class StartUp extends Component {
 
             console.log(userData)
 
-            axiosInstance.get('/user/getAll')
-            .then((res) => {
-                console.log(res)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            // axiosInstance.get('/user/getAll')
+            // .then((res) => {
+            //     console.log(res)
+            // })
+            // .catch((err) => {
+            //     console.log(err)
+            // })
 
-            // this.props.fetchAllUser() //This Has To Be Changed
+            socket.on('msgReceive' , (data) => {
+                console.log(data)
+            })
+            const fetchResult = async() => {
+                const dbReslt = await fetchUsers()
+                // console.log(dbReslt)
+                this.props.setUser(dbReslt)
+            }
+            fetchResult()
             this.props.setToken(JSON.parse(userData).token)
             this.props.navigation.navigate({routeName : 'Main'})
 
@@ -63,7 +71,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setToken : (token) => {dispatch(actionTypes.setToken(token))},
-        // fetchAllUser : () => {dispatch(actionTypes.fetchAllUser())}
+        setUser : (userArr) => {dispatch(actionTypes.setUser(userArr))}
     }
 } 
 
