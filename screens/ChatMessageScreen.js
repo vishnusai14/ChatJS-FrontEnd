@@ -23,12 +23,14 @@ class ChatMessageScreen extends React.Component  {
             senderEmail : this.state.sender,
             receiverEmail : this.props.navigation.getParam('email')
         }
-        this.setState((prevState) => ({
-            ...prevState,
-            messages : [...prevState.messages, data]
-        }))
+       
         const userData = await AsyncStorage.getItem('TOKEN')
         socket.emit('msg' , {msg : this.state.msg , email : this.props.navigation.getParam('email'), token : JSON.parse(userData).token})
+        this.setState((prevState) => ({
+            ...prevState,
+            messages : [...prevState.messages, data],
+            msg : ''
+        }))
     }
 
     loadMessages = async () => {
@@ -114,7 +116,7 @@ class ChatMessageScreen extends React.Component  {
                 }
                 </View>
                
-               <InputBar onChangeText = {(text) => {this.textHandler(text)}} onPress = {(msg) => {this.sendMsg(msg)}} />
+               <InputBar value = {this.state.msg} onChangeText = {(text) => {this.textHandler(text)}} onPress = {(msg) => {this.sendMsg(msg)}} />
             </View>
             
           )

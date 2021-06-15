@@ -4,13 +4,14 @@ import {StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
     message : {
-        height :150,
-
-        width : '50%',
+       
+        marginBottom : 20,
+        width : '70%',
         flexDirection : 'row',
         justifyContent : 'center',
         alignItems : 'center'
     },
+    
 })
 
 const Message = (props) => (

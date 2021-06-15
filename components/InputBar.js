@@ -11,7 +11,7 @@ const InputBar = (props) => {
                 >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.inner}>
-                        <TextInput onChangeText = {(value) => {props.onChangeText(value)}} placeholder="Message" style={styles.textInput} right={<TextInput.Icon name="send" onPress = {() => {props.onPress()}} />} />
+                        <TextInput value = {props.value} onChangeText = {(value) => {props.onChangeText(value)}} placeholder="Message" style={styles.textInput} right={<TextInput.Icon name="send" onPress = {() => {props.onPress()}} />} />
 
                     </View>
                 </TouchableWithoutFeedback>
