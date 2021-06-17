@@ -14,10 +14,9 @@ const chatReducer = (state = initialState, actions) => {
         }
     }
     if(actions.type === 'SET_USER') {
-        console.log("This is From Set User Reducer", actions.user.rows._array)
         return {
             ...state,
-            users : actions.user.rows._array
+            users : actions.user
         }
     }
 

@@ -4,6 +4,7 @@ import { View, Button, StyleSheet, Alert } from 'react-native'
 import Spinner from '../components/spinner'
 import axiosInstance from '../services/axiosInstance'
 import { getUser, saveUserToDb } from '../services/sqlitedb'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const styles = StyleSheet.create({
     inputContainer : {
         padding : 10
@@ -35,20 +36,28 @@ class CreateNewChat extends React.Component {
         }))
     }
 
-    saveUser = () => {
+    saveUser = async () => {
         console.log('Saving User')
         this.setState(prevState => ({
             ...prevState,
             isLoading : true
         }))
+
+        const userData = await AsyncStorage.getItem('TOKEN')
+        const token = JSON.parse(userData).token
         let data = {
             id : this.state.id
         }
 
-        getUser(this.state.id)
+        let checkData = {
+            userId : this.state.id,
+            token : token
+        }
+
+        axiosInstance.post('/friend/getUser', checkData)
         .then((res) => {
-            console.log(res)
-            if(res.rows._array.length > 0) {
+            console.log(res.data)
+            if(res.data.data === 'UserExist') {
                 console.log(res)
                 this.setState(prevState => ({
                     ...prevState,
@@ -59,9 +68,13 @@ class CreateNewChat extends React.Component {
             }else {
                 axiosInstance.post("/user/checkUser" , data)
                 .then((res) => {
-                   const email = res.data.data
-                    console.log(email)
-                    saveUserToDb(this.state.name, this.state.id, email)
+                    let saveData = {
+                        token : token,
+                        id : this.state.id,
+                        userName : res.data.data.userName,
+                        userEmail : res.data.data.email
+                    }
+                    axiosInstance.post('/friend/saveUser', saveData)
                     .then((response) => {
                         this.setState(prevState => ({
                             ...prevState,
@@ -101,7 +114,7 @@ class CreateNewChat extends React.Component {
                 <View>
                     <View style = {styles.inputContainer}>
                         <CustomInput textChangeHandler = {(text) => {this.idHandler(text)}} label = 'Id' value = {this.state.id} />
-                        <CustomInput textChangeHandler = {(text) => {this.nameHandler(text)}} label = 'Name' value = {this.state.name} />
+                        
                     </View>
                     <View>
                     <Button title = 'Save User' onPress = {() => {this.saveUser()}} />

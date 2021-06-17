@@ -6,6 +6,7 @@ import axiosInstance from '../services/axiosInstance'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Spinner from '../components/spinner'
 import { socket } from '../services/socketStuff'
+import { Avatar } from 'react-native-paper'
 class ChatMessageScreen extends React.Component  {
     flatList = React.createRef()
     navigationListener = undefined
@@ -14,6 +15,20 @@ class ChatMessageScreen extends React.Component  {
         messages : [],
         sender : '',
         msg : ''
+    }
+
+    static navigationOptions = ({navigation}) => {
+        return {
+            title : navigation.getParam('userName'),
+            headerRight : () => {
+                return (
+                    <View style = {{flexDirection : 'row', marginRight : 10}}>
+                        <Avatar.Image size={30} source={{uri : navigation.getParam('image')}} />
+                    </View>
+                )
+            }
+        }
+        
     }
 
     sendMsg = async () => {
@@ -31,6 +46,7 @@ class ChatMessageScreen extends React.Component  {
             messages : [...prevState.messages, data],
             msg : ''
         }))
+        
     }
 
     loadMessages = async () => {

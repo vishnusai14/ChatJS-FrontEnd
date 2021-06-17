@@ -49,7 +49,7 @@ class ImageSelector extends React.Component  {
                     console.log(result)
                     return
                 }
-                this.props.imageTaken(result.uri)
+                this.props.imageTaken(result.base64)
                 this.setState(prevState => ({
                     ...prevState,
                     imageUri : result.uri
@@ -70,7 +70,7 @@ class ImageSelector extends React.Component  {
             <View style = {styles.imagePicker}>
                 <View >
                 {   
-                    !this.state.imageUri ? <Avatar.Image size = {200} source = {require('../assets/icon.png')} /> :  <Avatar.Image size = {100} source = {{uri : this.state.imageUri}} />
+                    !this.state.imageUri ? <Avatar.Image size = {200} source = {{uri : this.props.image}} /> :  <Avatar.Image size = {200} source = {{uri : this.state.imageUri}} />
                 }
                     
                    

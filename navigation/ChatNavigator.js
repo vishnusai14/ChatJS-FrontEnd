@@ -8,6 +8,7 @@ import UserProfileScreen from '../screens/UserProfileScreen'
 import AuthScreen from '../screens/AuthScreen'
 import StartUp from '../screens/StartUp'
 import CreateNewChat from '../screens/CreateNewChat'
+import OtpVerify from '../screens/OtpVerify'
 import { Ionicons } from '@expo/vector-icons'
 
 const chatListNavigator = createStackNavigator(
@@ -62,10 +63,17 @@ const AuthNavigator = createStackNavigator(
     }
 )
 
+const OtpNaivgator = createStackNavigator(
+    {
+        OtpVerify : OtpVerify
+    }
+)
+
 const AuthChatNavigator = createSwitchNavigator(
     {
         StartUp : StartUp,
         Auth : AuthNavigator,
+        Otp:OtpNaivgator,
         Main : mainNavigator
     }
 )

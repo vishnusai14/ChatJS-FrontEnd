@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
 const Message = (props) => (
   
         <Card style = {{...styles.message, marginLeft : props.isSent ? 'auto' : 0}}>
-            <Card.Title style = {styles.title} title="Card Title" />
             <Card.Content style = {styles.content}>
                 <Paragraph style = {styles.text}>{props.msg}</Paragraph>
             </Card.Content>  
